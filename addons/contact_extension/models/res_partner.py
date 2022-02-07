@@ -4,8 +4,8 @@ from odoo import fields, api, models
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 
-    city_id = fields.Many2one('winfood.city', string="City")
-    township_name = fields.Many2one('winfood.township', string="TownShip", domain="[('city_id', '=', city_id)]")
+    city_id = fields.Many2one('winfood.city', string="City" , domain="[('state_id', '=', state_id)]")
+    township_id = fields.Many2one('winfood.township', string="TownShip", domain="[('city_id', '=', city_id)]")
     phone = fields.Char(required=True)
     gene_password = fields.Char(string="Password",readonly=True)
 
@@ -36,6 +36,7 @@ class City(models.Model):
     _name = 'winfood.city'
     _description = "City Name"
     name = fields.Char(string="City", required=True)
+    state_id = fields.Many2one('res.country.state', string='State')
 
 class TownShip(models.Model):
     _name = 'winfood.township'
