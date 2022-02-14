@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="wifood_portal_user_profile" name="Change Your Password">
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="container">
+                            <form action="/change/value" method="post">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                <div class="row">
+                                    <h2>Portal Change Password</h2>
+                                </div>
+                                <div class="row">
+                                    <h5>New Password :
+                                        <input type="text" name="name" class="o_field_float o_field_number o_input"/>
+                                    </h5>
+                                </div>
+                                <div class="row">
+                                    <button type="submit"
+                                            class="btn btn-primary float-right mb32"
+                                            style="margin-right:50px;">
+                                        Change Password
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </template>
+        <template id="portal_layout_winfood" inherit_id="portal.portal_layout">
+            <xpath expr="//div[@class='o_portal_my_details']" position="after">
+                <h4>PassWord
+                    <a role="button" href="/change/password" class="btn btn-sm btn-link">
+                        <i class="fa fa-pencil"/>
+                        Change
+                    </a>
+                </h4>
+                <hr class="mt-1 mb-0"/>
+            </xpath>
+        </template>
+    </data>
+</odoo>
+
