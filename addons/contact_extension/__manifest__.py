@@ -10,7 +10,6 @@
     'data': [
         'security/ir.model.access.csv',
         'data/sale_order_rule.xml',
-        # 'data/res_user.xml',
         'views/account_move.xml',
         'views/res_partner.xml',
         'views/sale_order.xml',
