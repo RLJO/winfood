@@ -6,7 +6,7 @@ class PurchaseOrder(models.Model):
 
     check_options = fields.Selection([
         ('oversea', 'Oversea PO'),
-        ('local', 'Local PO')], string="Check Option",default="local" )
+        ('local', 'Local PO')], string="PO Type",default="local" )
 
     approve_state = fields.Selection([('draft','Draft'),('approve', 'Approve')], string="State", default='draft',tracking=True )
 
