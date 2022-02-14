@@ -1,5 +1,7 @@
+from email.contentmanager import raw_data_manager
 import string, random
 from odoo import fields, api, models
+from random import randint, randrange
 
 class ResPartner(models.Model):
     _inherit = 'res.partner'
@@ -11,25 +13,23 @@ class ResPartner(models.Model):
 
     @api.model
     def create(self, vals):
-        name = vals.get('name')
-        phone = vals.get('phone')
-        if phone:
-            characters = list(string.digits)
-            password = []
-            for i in range(8):
-                password.append(random.choice(characters))
-            random.shuffle(password)
-            listToStr = ' '.join([str(elem) for elem in password])
-            gene_password = listToStr
         result = super(ResPartner, self).create(vals)
-        result.write({'gene_password':gene_password})
-        portal_user = self.env['res.users'].create({
-            'name': name,
-            'login': phone,
-            'password': gene_password,
-            'partner_id': result.id,
-            'groups_id': [(6, 0, [self.env.ref('base.group_portal').id])],
-        })
+        
+        phone = vals.get('phone')
+        gene_password = None
+        if phone:
+            # auto Generate Password
+            gene_password = randint(10**(6-1), (10**6)-1)
+            
+            name = vals.get('name')
+            result.write({'gene_password':gene_password})
+            portal_user = self.env['res.users'].create({
+                'name': name,
+                'login': phone,
+                'password': gene_password,
+                'partner_id': result.id,
+                'groups_id': [(6, 0, [self.env.ref('base.group_portal').id])],
+            })
         return result
 
 class City(models.Model):
