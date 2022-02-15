@@ -71,7 +71,6 @@ class Expense_Prepaid(models.Model):
 			return emp_id
 		ids = self.env['hr.employee'].search([('user_id', '=', self.env.uid)])
 		if ids:
-			print('.................. id ',ids)
 			return ids[0]
 		return False
 
@@ -138,9 +137,7 @@ class Expense_Prepaid(models.Model):
 			admin = False
 			to_approve_id = self.env.uid
 			user = approve.user_id
-			print('.................. now id ',to_approve_id,' and approve id ',approve.approved_by_id.user_id)
 			# to_approve_id= self.env['hr.employee'].search([('user_id', '=', self.env.uid)]).id
-			print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> RES USERS = ',user)
 			if to_approve_id == approve.approved_by_id.user_id.id:
 				reason = True
 			if to_approve_id == approve.finance_approved_id.user_id.id:
@@ -150,8 +147,6 @@ class Expense_Prepaid(models.Model):
 			# 	print('........................... cashier ',cashier)
 			if user.has_group('petty_cash_expense_extension.group_users'):
 				user = True
-				print('............................... user ',user)
-			print ('>>>>>>>>>>>>> approve ? >>>>>>>>>>>>>>>>> ', reason,' and finance >>>>>>> ',finance)
 			approve.is_approve = reason
 			approve.is_approve_finance = finance
 			# approve.is_cashier = cashier
@@ -260,7 +255,6 @@ class Expense_Prepaid(models.Model):
 		# if not self.account_ids:
 		# 	raise ValidationError('Define Advance Account')
 		acc_ids = self.env['account.account'].search([('name','=','Advance Payment -  Employee')])
-		print('--------------------------------------- default acc ',acc_ids)
 		self.account_ids = acc_ids.id
 		self.account_code = acc_ids.code
 		move_line = {
@@ -320,7 +314,6 @@ class Expense_Prepaid(models.Model):
 	def _prepare_move_line(self, line):
 		#partner_id = self.employee_name.address_home_id.commercial_partner_id.i
 		if self.currency_id.id !=self.company_id.currency_id.id:
-			print('woking here ---------------------------->><<>>><<>>>',line['price'])
 			return {
 				'date_maturity': line.get('date_maturity'),
 				'general_exp_id': self.id,
@@ -342,7 +335,6 @@ class Expense_Prepaid(models.Model):
 				'payment_id': line.get('payment_id'),
 			}
 		else:
-			print('not working here ----------------------->><<>><<>>')
 			return {
 				'date_maturity': line.get('date_maturity'),
 				'general_exp_id': self.id,

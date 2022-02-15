@@ -25,7 +25,6 @@ class AccountTransfer(models.Model):
 			return emp_id
 		ids = self.env['hr.employee'].search([('user_id', '=', self.env.uid)])
 		if ids:
-			print('.................. id ',ids)
 			return ids[0]
 		return False
 

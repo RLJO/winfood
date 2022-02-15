@@ -34,7 +34,6 @@ class PettyCashExpense(models.Model):
 			return emp_id
 		ids = self.env['hr.employee'].search([('user_id', '=', self.env.uid)])
 		if ids:
-			print('.................. id ',ids)
 			return ids[0]
 		return False
 
@@ -210,13 +209,10 @@ class PettyCashExpense(models.Model):
 			reason = False
 			finance = False
 			to_approve_id = self.env.uid
-			print('.................. now id ',to_approve_id,' and approve id ',approve.approved_by_id.user_id)
-			# to_approve_id= self.env['hr.employee'].search([('user_id', '=', self.env.uid)]).id
 			if to_approve_id == approve.approved_by_id.user_id.id:
 				reason = True
 			if to_approve_id == approve.finance_approved_id.user_id.id:
 				finance = True
-			print ('>>>>>>>>>>>>> approve ? >>>>>>>>>>>>>>>>> ', reason)
 			approve.is_approve = reason
 			approve.is_approve_finance = finance
 
@@ -237,7 +233,6 @@ class PettyCashApprove(models.Model):
 		tbl_petty_obj = self.env['petty.cash.expense']
 		journal_id = self.payment_journal_id
 		pc_id = tbl_petty_obj.search([('id','=',self.petty_request.id),('payment_journal_id','=',journal_id.id)])
-		print('................Journal ID is '+str(pc_id.payment_journal_id)+' and another id is '+str(journal_id)+' pc is '+str(pc_id))
 		if journal_id.id == pc_id.payment_journal_id.id:
 			# pc_value = {'state': 'validate'}
 			# pc_id.write(pc_value)

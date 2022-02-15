@@ -169,11 +169,9 @@ class HrExpenseSheet(models.Model):
 		for approve in self:
 			reason = False
 			to_approve_id = self.env.uid
-			print('.................. now id ',to_approve_id,' and approve id ',approve.approved_by_id.user_id)
 			# to_approve_id= self.env['hr.employee'].search([('user_id', '=', self.env.uid)]).id
 			if to_approve_id == approve.approved_by_id.user_id.id:
 				reason = True
-			print ('>>>>>>>>>>>>> approve ? >>>>>>>>>>>>>>>>> ', reason)
 			approve.is_approve = reason
 
 	def action_sheet_move_create(self):
