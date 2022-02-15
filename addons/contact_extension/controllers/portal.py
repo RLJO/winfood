@@ -1,26 +1,31 @@
-from odoo import fields, http, _
+from odoo import http,_
 from odoo.http import request
 from odoo.addons.portal.controllers.portal import pager as portal_pager
 from odoo.addons.sale.controllers.portal import CustomerPortal
 
-
 class CustomerPortal(CustomerPortal):
 
     @http.route(['/change/password'], type='http', auth='user', website=True)
-    def change_password(self, **kw):
+    def change_password(self):
         return request.render("contact_extension.wifood_portal_user_profile")
 
     @http.route(['/change/value'], type='http',methods=["POST"], auth='user', website=True, csrf=False)
-    def get_password_value(self,**kg):
+    def get_password_value(self,redirect=None,**kg):
         user = request.env.uid
         user_id = request.env['res.users'].sudo().browse(user)
         users = request.env['res.users'].sudo().search([('id', '=', user)])
         new_passwd = kg[ 'name' ]
-        if new_passwd:
-            user_id.write({'gene_password':new_passwd})
-            users.write({
-                'password':new_passwd,
-            })
+        confirm_passwd = kg['name2']
+        if new_passwd and confirm_passwd:
+            if new_passwd == confirm_passwd:
+                user_id.write({'gene_password':new_passwd})
+                users.write({
+                    'password':new_passwd,
+                })
+                return request.redirect('/my/home')
+            elif new_passwd != confirm_passwd:
+                return request.render("contact_extension.portal_change_password_error")
+
     def _prepare_home_portal_values(self):
         values = super(CustomerPortal, self)._prepare_home_portal_values()
         partner = request.env.user.partner_id

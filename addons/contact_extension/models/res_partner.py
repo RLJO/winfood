@@ -46,7 +46,6 @@ class City(models.Model):
     _description = "City Name"
     name = fields.Char(string="City", required=True)
 
-
 class TownShip(models.Model):
     _name = 'winfood.township'
     _description = "TownShip Name"

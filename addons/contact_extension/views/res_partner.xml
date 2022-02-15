@@ -22,6 +22,17 @@
                         <field name="township_name" placeholder="Township"/>
                     </div>
                 </xpath>
+                <xpath expr="//sheet/notebook/page/field[@name='child_ids']/form//div[@class='o_address_format']/field[@name='city']"
+                       position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//sheet/notebook/page/field[@name='child_ids']/form//div[@class='o_address_format']/field[@name='city']"
+                       position="after">
+                    <div class="d-flex justify-content-between">
+                        <field name="city_id" placeholder="City"/>
+                        <field name="township_name" placeholder="Township"/>
+                    </div>
+                </xpath>
             </field>
         </record>
         <record model="ir.ui.view" id="view_winfood_township_form">

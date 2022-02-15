@@ -1,45 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <template id="wifood_portal_user_profile" name="Change Your Password">
-            <t t-call="web.html_container">
-                <t t-call="web.external_layout">
-                    <div class="page">
-                        <div class="container">
-                            <form action="/change/value" method="post">
-                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
-                                <div class="row">
-                                    <h2>Portal Change Password</h2>
-                                </div>
-                                <div class="row">
-                                    <h5>New Password :
-                                        <input type="text" name="name" class="o_field_float o_field_number o_input"/>
-                                    </h5>
-                                </div>
-                                <div class="row">
-                                    <button type="submit"
-                                            class="btn btn-primary float-right mb32"
-                                            style="margin-right:50px;">
-                                        Change Password
+        <template id="portal_change_password_error">
+            <t t-call="portal.portal_layout">
+                <form action="/change/password" method="post">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    <div class="row row o_portal_details">
+                        <div class="col-lg-8">
+                            <h5 style="color:red;margin-top:15px;">Your passwords values are not equal !</h5>
+                            <br/>
+                            <div class="row">
+                                <div t-attf-class="form-group col-xl-6">
+                                    <button type="submit" class="btn btn-primary float-left mb32">
+                                        Cancle
                                     </button>
                                 </div>
-                            </form>
+                            </div>
                         </div>
                     </div>
-                </t>
+                </form>
+            </t>
+        </template>
+        <template id="wifood_portal_user_profile" name="Change Your Password">
+            <t t-call="portal.portal_layout">
+                <t t-set="additional_title">Portal Change Password</t>
+                <form action="/change/value" method="post">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    <div class="row o_portal_details">
+                        <div class="col-lg-6">
+                            <h4 style="margin-top:15px;text-align:center;">Change Your Password</h4>
+                            <br/>
+                            <div class="row">
+                                <div t-attf-class="form-group col-xl-6">
+                                    <label class="col-form-label" for="name" >New Password
+                                    </label>
+                                    <br/>
+                                    <input type="password" name="name" class="form-control o_field_float o_field_number o_input" aria-describedby="basic-addon1"/>
+                                </div>
+
+                                <div t-attf-class="form-group col-xl-6">
+                                    <label class="col-form-label" for="name2">Confirm Password</label>
+                                    <br/>
+                                    <input type="password" name="name2" class="form-control o_field_float o_field_number o_input" aria-describedby="basic-addon1"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div t-attf-class="form-group col-xl-6">
+                                    <button type="submit"
+                                            class="btn btn-primary float-left mb32">
+                                        Confirm
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </t>
         </template>
         <template id="portal_layout_winfood" inherit_id="portal.portal_layout">
             <xpath expr="//div[@class='o_portal_my_details']" position="after">
-                <h4>PassWord
+                <hr/>
+                <h5>Password
                     <a role="button" href="/change/password" class="btn btn-sm btn-link">
                         <i class="fa fa-pencil"/>
                         Change
                     </a>
-                </h4>
+                </h5>
                 <hr class="mt-1 mb-0"/>
             </xpath>
         </template>
     </data>
 </odoo>
-
