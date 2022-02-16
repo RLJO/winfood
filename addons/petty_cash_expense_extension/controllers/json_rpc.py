@@ -37,4 +37,3 @@ uid = call(url, "common", "login", DB, USER, PASS)
 #     'create_uid': uid,
 # }
 partner_id = call(url, "object", "execute", DB, uid, PASS, 'expense.prepaid', 'read', [34])
-print('......... partner ',partner_id)

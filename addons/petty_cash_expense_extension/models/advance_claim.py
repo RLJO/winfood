@@ -50,7 +50,6 @@ class Expense_Prepaid(models.Model):
 			return emp_id
 		ids = self.env['hr.employee'].search([('user_id', '=', self.env.uid)])
 		if ids:
-			print('.................. id ',ids)
 			return ids[0]
 		return False
 
@@ -117,9 +116,8 @@ class Expense_Prepaid(models.Model):
 			admin = False
 			to_approve_id = self.env.uid
 			user = approve.user_id
-			print('.................. now id ',to_approve_id,' and approve id ',approve.approved_by_id.user_id)
 			# to_approve_id= self.env['hr.employee'].search([('user_id', '=', self.env.uid)]).id
-			print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> RES USERS = ',user)
+
 			if to_approve_id == approve.approved_by_id.user_id.id:
 				reason = True
 			if to_approve_id == approve.finance_approved_id.user_id.id:
@@ -129,8 +127,6 @@ class Expense_Prepaid(models.Model):
 			# 	print('........................... cashier ',cashier)
 			if user.has_group('petty_cash_expense_extension.group_users'):
 				user = True
-				print('............................... user ',user)
-			print ('>>>>>>>>>>>>> approve ? >>>>>>>>>>>>>>>>> ', reason,' and finance >>>>>>> ',finance)
 			approve.is_approve = reason
 			approve.is_approve_finance = finance
 			# approve.is_cashier = cashier
@@ -142,18 +138,13 @@ class Expense_Prepaid(models.Model):
 	# 11-01-2021 by M2h ********************************************8
 		sequence = self.env['ir.sequence'].next_by_code('advance.claim')
 		journal = self.state_type.id
-		print('>>>>>>>>>>>> state_type ',str(self.state_type))
-		print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.  code ',str(self.state_type.code))
-		print('.......>>>>>>>>>>>>.--------------- CHOOSE JOURNAL ',journal)
 		journal_ids = self.env['account.journal'].search([('id','=',journal)])
 		code = journal_ids.code
-		print('...........>>>>>>>>>>>>>>>>>>>>>>>>>>>>> code = ',code,' and journal = ',journal_ids)
 		year = datetime.now().year
 		month = datetime.now().month
 		if month < 10:
 			month = '0'+str(month)
 		seq_no = str(self.env.user.company_id.code)+'-'+str(code)+'-'+str(year)+'-'+str(month)+sequence
-		print('....................... sequence no is = ',str(seq_no))
 		return seq_no
 
 	@api.onchange('employee_name')
@@ -312,7 +303,6 @@ class Expense_Prepaid(models.Model):
 	def _prepare_move_line(self, line):
 		#partner_id = self.employee_name.address_home_id.commercial_partner_id.i
 		if self.currency_id.id !=self.company_id.currency_id.id:
-			print('woking here ---------------------------->><<>>><<>>>',line['price'])
 			return {
 				'date_maturity': line.get('date_maturity'),
 				'adv_claim_id': self.id,
@@ -334,7 +324,6 @@ class Expense_Prepaid(models.Model):
 				'payment_id': line.get('payment_id'),
 			}
 		else:
-			print('not working here ----------------------->><<>><<>>')
 			return {
 				'date_maturity': line.get('date_maturity'),
 				'adv_claim_id': self.id,

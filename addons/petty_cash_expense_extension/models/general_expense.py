@@ -89,7 +89,6 @@ class hr_general_expense(models.Model):
 		if month < 10:
 			month = '0'+str(month)
 		seq_no = str(self.env.user.company_id.code)+'-'+'AC-'+str(year)+'-'+str(month)+sequence
-		print('....................... sequence no is = ',str(seq_no))
 		return seq_no
 
 
@@ -187,7 +186,6 @@ class hr_general_expense(models.Model):
 			cashier = False
 			to_approve_id = self.env.uid
 			user = approve.user_id
-			print('.................. now id ',to_approve_id,' and approve id ',approve.approved_by_id.user_id)
 			# to_approve_id= self.env['hr.employee'].search([('user_id', '=', self.env.uid)]).id
 			if to_approve_id == approve.approved_by_id.user_id.id:
 				reason = True
@@ -195,7 +193,6 @@ class hr_general_expense(models.Model):
 				finance = True
 			if user.has_group('petty_cash_expense_extension.group_petty_cashier'):
 				cashier = True
-			print ('>>>>>>>>>>>>> cashier approve ? >>>>>>>>>>>>>>>>> ', cashier)
 			approve.is_approve = reason
 			approve.is_approve_finance = finance
 			approve.is_cashier = cashier
@@ -631,7 +628,6 @@ class hr_general_expense(models.Model):
 
 	def _prepare_move_line(self, line):
 		#partner_id = self.employee_id.address_home_id.commercial_partner_id.id
-		print(line.get('amount_currency'),line,'----------------------Expense')
 		if self.currency_id.id !=self.company_id.currency_id.id:
 	# 22-01-2021 Extra credit by M2h
 			# exp = self.amount
@@ -683,7 +679,6 @@ class hr_general_expense(models.Model):
 
 	def _prepare_move_line_adjustment(self, line):
 		#partner_id = self.employee_id.address_home_id.commercial_partner_id.id
-		print(line.get('price'),line,'----------------------Ajustment')
 		if self.currency_id.id !=self.company_id.currency_id.id:
 			return {
 				'date_maturity': line.get('date_maturity'),
@@ -735,7 +730,6 @@ class hr_general_expense(models.Model):
 		adjust = self.adjustment_amount
 			
 		if adv > amount:
-			print('..........///////////////// close_expenses....Additional........ if condition')
 			journal_dict = {}
 			move_line_idd = self.env['account.move.line'].search([('general_exp_id','=',self.expense_prepaid_ids.id)])
 			move_idd = self.env['account.move'].search([('id','=',move_line_idd.move_id.id)])
@@ -744,7 +738,6 @@ class hr_general_expense(models.Model):
 			collect = 'Additional: '+str(self.expense_prepaid_ids.voucher_no)
 			refund = 'Refund: '+str(self.expense_prepaid_ids.voucher_no)
 			journal_idd = self.env['account.journal'].search([('code','=','JV')])
-			print('Adjustment Journal.................',journal_idd)
 			for expense in self:
 				if not expense.date:
 					raise UserError(_('You must choose close date!'))
@@ -819,16 +812,12 @@ class hr_general_expense(models.Model):
 					#convert eml into an osv-valid format
 
 		else:
-			print('---------------- Adjustment Amount = ',adjust)
 			if adjust > 0:
-				print('..........///////////////// close_expenses....Additional........ 2 jounals condition')
-				
 				acc_model = self.env['account.move']
 				collect = 'Additional: '+str(self.expense_prepaid_ids.voucher_no)
 				journal_idd = self.env['account.journal'].search([('code','=','JV'),('company_id','=',self.company_id.id)])
 				credit_acc = self.expense_prepaid_ids.cash_account
 				debit_acc = self.line_ids.product_id.property_account_expense_id
-				print('--------------- Adjustment Customize ---------------')
 
 				acc_move = acc_model.create({
 					'journal_id': journal_idd.id,
@@ -843,7 +832,6 @@ class hr_general_expense(models.Model):
 				})
 				acc_move.action_post()
 			else:
-				print('..........///////////////// close_expenses.....Refund..... else condition')
 				journal_dict = {}
 				move_line_idd = self.env['account.move.line'].search([('general_exp_id','=',self.expense_prepaid_ids.id)])
 				move_idd = self.env['account.move'].search([('id','=',move_line_idd.move_id.id)])
@@ -854,8 +842,6 @@ class hr_general_expense(models.Model):
 				journal_idd = self.env['account.journal'].search([('code','=','JV')])
 				journal_csh = self.env['account.account'].search([('name','=','Cash')])
 				line_ids = self.env['hr.expense.line'].search([('expense_id','=',self.ids)])
-				print ('........................ Line IDS ',line_ids.product_id.property_account_expense_id)
-				print('Adjustment Journal.................',journal_idd,' and cash journal = ',journal_csh)
 				for expense in self:
 					if not expense.date:
 						raise UserError(_('You must choose close date!'))
@@ -878,7 +864,6 @@ class hr_general_expense(models.Model):
 								'ref': collect,
 								'name': '/',
 							})
-							print (collect,'........... if condition')
 						else:
 							move = self.env['account.move'].create({
 								'journal_id': journal.id,
@@ -887,7 +872,6 @@ class hr_general_expense(models.Model):
 								'ref': refund,
 								'name': '/',
 							})
-							print (refund,'........... else condition')
 
 						for journal, expense_list in journal_dict.items():
 							#print "CLOSING"
@@ -909,7 +893,6 @@ class hr_general_expense(models.Model):
 								# 	aid = line_ids.product_id.account_ids
 								# 	print('................... AID Line ',aid)
 								aid = line_ids.product_id.property_account_expense_id if diff_amount > 0 else journal_csh
-								print('......................AID ',aid)
 								# aid = expense.expense_prepaid_ids.account_ids if diff_amount > 0 else expense.expense_prepaid_ids.cash_account
 								amount = diff_amount if diff_amount < 0 else diff_amount * (-1)
 								# if diff_amount < 0 and not expense.state_type.default_credit_account_id:
@@ -965,7 +948,6 @@ class hr_general_expense(models.Model):
 					journal_dict[journal].append(expense)
 					#print journal_dict.items()
 					#create the move that will contain the accounting entries
-					print('.....................adj journal id ',journal)
 					move = self.env['account.move'].create({
 						'journal_id': journal.id,
 						'company_id': self.env.user.company_id.id,
@@ -994,7 +976,6 @@ class hr_general_expense(models.Model):
 							# 	aid = line_ids.account_ids
 							# aid = expense.expense_prepaid_ids.account_ids if diff_amount > 0 else expense.company_id.currency_exchange_journal_id.default_debit_account_id
 							aid = line_ids.product_id.property_account_expense_id if diff_amount > 0 else expense.company_id.currency_exchange_journal_id.default_debit_account_id
-							print(aid,'---------------------- second time ------------------------->>')
 							amount = diff_amount if diff_amount < 0 else diff_amount * (-1)
 							if diff_amount < 0 and not expense.company_id.currency_exchange_journal_id.default_credit_account_id:
 								raise UserError(_("No debit account found for the %s journal, please configure one.") % (expense.company_id.currency_exchange_journal_id.name))
@@ -1008,10 +989,8 @@ class hr_general_expense(models.Model):
 									'date_maturity': expense.date,
 									'ref': expense.expense_prepaid_ids.voucher_no or expense.employee_id.name,
 								})
-							print(move_lines,'----------------------------------->><<>><<>>')
 							lines = list(map(lambda x:(0, 0, expense._prepare_gain_line(x)), move_lines))
 							move.with_context(dont_create_taxes=True).write({'line_ids': lines})
-							print('-------------------exchange gain loss --------------------->><<>>')
 							move.post()
 					#print move_lines
 
@@ -1070,7 +1049,6 @@ class hr_general_expense(models.Model):
 			#print "loop 1"
 			diff_amount = (expense.currency_rate-expense.expense_prepaid_ids.currency_rate)*expense.amount
 			aid = expense.expense_prepaid_ids.account_ids if diff_amount < 0 else expense.company_id.currency_exchange_journal_id.default_debit_account_id
-			print (aid,'--------first one ------------------------------------')
 			amount = diff_amount if diff_amount > 0 else diff_amount * (-1)
 			#print amount
 			if diff_amount > 0 and not expense.state_type.default_debit_account_id:
