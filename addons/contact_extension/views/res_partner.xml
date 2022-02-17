@@ -6,6 +6,9 @@
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
+                <xpath expr="//field[@name='email']" position="replace">
+                    <field name="email" string="Email" widget="email" context="{'gravatar_image': True}"/>
+                </xpath>
                 <xpath expr="//sheet/div/h1/field[@name='name']" position="after">
                     <div style="font-weight: bold;" class="oe_inline">
                         <group>
@@ -17,8 +20,8 @@
                     <attribute name="invisible">1</attribute>
                 </xpath>
                 <xpath expr="//sheet/group/group/div/field[@name='city']" position="after">
-                    <div class="d-flex justify-content-between">
-                        <field name="city_id" placeholder="City"/>
+                    <div class="d-flex">
+                        <field name="city_id" placeholder="City" style="margin-right:10px;"/>
                         <field name="township_name" placeholder="Township"/>
                     </div>
                 </xpath>
@@ -28,8 +31,8 @@
                 </xpath>
                 <xpath expr="//sheet/notebook/page/field[@name='child_ids']/form//div[@class='o_address_format']/field[@name='city']"
                        position="after">
-                    <div class="d-flex justify-content-between">
-                        <field name="city_id" placeholder="City"/>
+                    <div class="d-flex">
+                        <field name="city_id" placeholder="City" style="margin-right:10px;"/>
                         <field name="township_name" placeholder="Township"/>
                     </div>
                 </xpath>
