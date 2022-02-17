@@ -11,7 +11,7 @@
                     <field name="approve_state" readonly="1"/>
                 </xpath>
                 <xpath expr="//header/button[@name='button_cancel']" position="after">
-                    <button name="action_approve" string="Approved" attrs="{'invisible':[('approve_state','=','approve')]}" type="object" class="oe_highlight"/>
+                    <button name="action_approve" string="Approved" groups="purchase.group_purchase_manager" attrs="{'invisible':[('approve_state','=','approve')]}" type="object" class="oe_highlight"/>
                 </xpath>
             </field>
         </record>
