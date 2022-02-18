@@ -10,40 +10,41 @@
                 <field name="get_user" invisible="1"/>
             </xpath>
 
-            <xpath expr="//form/header/button[@name='action_assign']" position="replace">
-               <button name="action_assign" attrs="{'invisible': ['|',('show_check_availability', '=', False),('get_user','=',True)]}" string="Check Availability" type="object" class="oe_highlight" groups="base.group_user"/>
+            <xpath expr="//form/header/button[@name='action_assign']" position="attributes">
+               <attribute name="groups">stock.group_stock_manager</attribute>
             </xpath>
+
             <xpath expr="//form/header/button[@name='button_scrap']" position="replace">
                <button name="button_scrap" type="object" string="Scrap" attrs="{'invisible': ['|', '|','|', '&amp;', ('picking_type_code', '=', 'incoming'), ('state', '!=', 'done'), '&amp;', ('picking_type_code', '=', 'outgoing'), ('state', '=', 'done'), ('is_locked', '=', False), '&amp;', ('get_user','=',True),('state','!=', 'draft')]}"/>
             </xpath>
+          
             <xpath expr="//form/header/button[@name='action_cancel']" position="replace">
                <button name="action_cancel" attrs="{'invisible': ['|','|', ('state', 'not in', ('assigned', 'confirmed', 'partially_available', 'draft', 'waiting')), ('is_locked', '=', False), '&amp;', ('get_user','=',True),('state','!=', 'draft')]}" string="Cancel" groups="base.group_user" type="object"/>
             </xpath>
 
-            <xpath expr="//form/header/button[@name='button_validate']" position="replace">
-               <button name="button_validate" attrs="{'invisible': ['|','|', ('state', 'in', ('waiting','confirmed')), ('show_validate', '=', False), '&amp;',('get_user','=',True),('state','!=', 'draft')]}" string="Validate" type="object" class="oe_highlight" groups="stock.group_stock_user"/>
+            <xpath expr="//form/header/button[@name='button_validate']" position="attributes">
+               <attribute name="groups">stock.group_stock_manager</attribute>
             </xpath>
 
-            <xpath expr="//form/header/button[4]" position="replace">
-               <button name="button_validate" attrs="{'invisible': ['|','|', ('state', 'not in', ('waiting', 'confirmed')), ('show_validate', '=', False),('get_user','=',True),'&amp;',('get_user','=',True)]}" string="Validate" type="object" groups="stock.group_stock_user" class="o_btn_validate"/>
+            <xpath expr="//form/header/button[4]" position="attributes">
+              <attribute name="groups">stock.group_stock_manager</attribute>
             </xpath>
 
-            <xpath expr="//form/header/button[@name='do_print_picking']" position="replace">
-               <button name="do_print_picking" string="Print" groups="stock.group_stock_user" type="object" attrs="{'invisible': ['|','|', ('state', 'not in', ('assigned', 'partially_available')), ('is_locked', '=', False),'&amp;',('get_user','=',True)]}"/>
+            <xpath expr="//form/header/button[@name='do_print_picking']" position="attributes">
+               <attribute name="groups">stock.group_stock_manager</attribute>
             </xpath>
 
-            <xpath expr="//form/header/button[@name='%(stock.action_report_delivery)d']" position="replace">
-               <button name="%(stock.action_report_delivery)d" string="Print" attrs="{'invisible': ['|','|', ('state', '!=', 'done'), ('is_locked', '=', False),'&amp;',('get_user','=',True)]}" type="action" groups="base.group_user"/>
+            <xpath expr="//form/header/button[@name='%(stock.action_report_delivery)d']" position="attributes">
+               <attribute name="groups">stock.group_stock_manager</attribute>
             </xpath>
 
-            <xpath expr="//form/header/button[@name='%(stock.act_stock_return_picking)d']" position="replace">
-               <button name="%(stock.act_stock_return_picking)d" string="Return" attrs="{'invisible': ['|','|', ('state', '!=', 'done'), ('is_locked', '=', False),'&amp;',('get_user','=',True)]}" type="action" groups="base.group_user"/>
-            </xpath>
-
-            <xpath expr="//form/header/button[@name='do_unreserve']" position="replace">
-                <button name="do_unreserve" string="Unreserve" groups="base.group_user" type="object" attrs="{'invisible': ['|', '|', '|', '|','|', ('picking_type_code', '=', 'incoming'), ('immediate_transfer', '=', True), ('is_locked', '=', False), '&amp;', ('state', 'not in', ('assigned', 'partially_available')), ('move_type', '!=', 'one'), '&amp;', ('state', 'not in', ('assigned', 'partially_available', 'confirmed')), ('move_type', '=', 'one'),'&amp;',('get_user','=',True)]}"/>
+             <xpath expr="//form/header/button[@name='%(stock.act_stock_return_picking)d']" position="attributes">
+               <attribute name="groups">stock.group_stock_manager</attribute>
             </xpath>
             
+            <xpath expr="//form/header/button[@name='do_unreserve']" position="attributes">
+               <attribute name="groups">stock.group_stock_manager</attribute>
+            </xpath>
 
         </field>
     </record>
