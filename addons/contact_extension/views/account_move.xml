@@ -26,7 +26,6 @@
             </xpath>
         </template>
         <!--        Add Customer Information -->
-
         <template id="portal_invoice_page_table_winfood" inherit_id="account.portal_my_invoices">
             <xpath expr="//t/t/thead/tr/th[@class='text-right']" position="before">
                 <th class="text-right"></th>
