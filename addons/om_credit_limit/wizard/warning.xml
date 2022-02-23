@@ -9,14 +9,14 @@
                     <div class="col-12 text-center">
                       <div class="card text-white bg-danger mb-3 w-75 ml64">
                         <div class="card-body bg-transparent text-center">
-                          <p> Credit limit warning.You are credit limit is more than Tolal! </p>
+                          <p> Credit limit warning.You are credit limit is more than total! </p>
                         </div>
                       </div>
                     </div>
                 </div>
                 <footer>
-                    <button string="NO" class="btn-primary"
-                            special="cancel"/>
+                    <button string="NO" class="btn-primary" special="cancel"/>
+                    <button name="action_approve_credit_limit" groups="sales_team.group_sale_manager" type="object" string="Approve"/>
                 </footer>
             </form>
         </field>

@@ -8,6 +8,7 @@ class ResPartner(models.Model):
 class SaleOrder(models.Model):
     _inherit = "sale.order"
 
+    credit_approve = fields.Boolean('Approved', default=False)
     def action_confirm(self):
 
         if self.partner_id and \
@@ -18,7 +19,7 @@ class SaleOrder(models.Model):
                 sum += rec.amount_total
 
             amount_due =self.amount_total
-            if amount_due > self.partner_id.amount_credit_limit or sum >  self.partner_id.amount_credit_limit:
+            if (amount_due > self.partner_id.amount_credit_limit or sum >  self.partner_id.amount_credit_limit) and not self.credit_approve:
                 return {
                     'name': _('Warning'),
                     'type': 'ir.actions.act_window',
