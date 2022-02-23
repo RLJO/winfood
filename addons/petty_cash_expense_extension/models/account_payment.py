@@ -154,13 +154,13 @@ class AccountMove(models.Model):
 
 			# 11-01-2021 by M2h ************************************************
 				
-				year = datetime.now().year
-				month = datetime.now().month
-				journal = self.journal_id.code
-				seq = self.env['ir.sequence'].next_by_code('account.move')
-				to_write['name'] = str(self.env.user.company_id.code)+'/'+str(journal)+'/'+str(year)+'/'+str(month)+seq
-				to_write['create_no'] = str('C')+seq
-				# to_write['name'] = sequence.with_context(ir_sequence_date=move.date).next_by_id()
+				# year = datetime.now().year
+				# month = datetime.now().month
+				# journal = self.journal_id.code
+				# seq = self.env['ir.sequence'].next_by_code('account.move')
+				# to_write['name'] = str(self.env.user.company_id.code)+'/'+str(journal)+'/'+str(year)+'/'+str(month)+seq
+				# to_write['create_no'] = str('C')+seq
+				to_write['name'] = sequence.with_context(ir_sequence_date=move.date).next_by_id()
 
 			move.write(to_write)
 
