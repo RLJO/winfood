@@ -381,7 +381,7 @@
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//sheet/group/group/field[@name='partner_id']" position="after">
-                    <field name="customer_confirmation" string="Customer Information"/>
+                    <field name="customer_confirmation" readonly="1" string="Customer Information"/>
                 </xpath>
             </field>
         </record>

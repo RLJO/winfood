@@ -11,7 +11,8 @@
     'license': 'LGPL-3',
     'data': [
         'wizard/warning.xml',
-        'views/res_partner.xml'
+        'views/res_partner.xml',
+        'views/sale_order.xml'
     ],
     'images': ['static/description/banner.png'],
 

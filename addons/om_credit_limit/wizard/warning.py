@@ -9,6 +9,12 @@ class RaiseWarning(models.TransientModel):
         order = self.env['sale.order'].browse(self._context.get('active_id'))
         if order.exists():
             return order.with_context(skip_credit_check=True).action_confirm()
+
+    def action_approve_credit_limit(self):
+        order = self.env['sale.order'].browse(self._context.get('active_id'))
+        if order.exists():
+            order.credit_approve = True
+
 #
 # class RaiseWarning(models.TransientModel):
 #     _name = "warning.warning"
