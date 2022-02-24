@@ -1,5 +1,6 @@
-from odoo import fields, api, models
+from odoo import fields, api, models, _
 from random import randint
+from odoo.exceptions import UserError
 
 class ResPartner(models.Model):
     _inherit = 'res.partner'
@@ -13,8 +14,9 @@ class ResPartner(models.Model):
     def create(self, vals):
         name = vals.get('name')
         phone = vals.get('phone')
+        # menu_id = self._context.get('params').get('menu_id') if self._context.get('params') else None
         result = super(ResPartner, self).create(vals)
-        if phone:
+        if self._context.get('default_customer_rank') and phone:
             gene_password = randint(10 ** (6 - 1), (10 ** 6) - 1)
             result.write({'gene_password': gene_password})
             self.env['res.users'].create({
@@ -23,23 +25,46 @@ class ResPartner(models.Model):
                 'password': str(gene_password),
                 'partner_id': result.id,
                 'groups_id': [(6, 0, [self.env.ref('base.group_portal').id])],
-            })
+            })                
+        else:
+            pass
         return result
 
-    def write(self, vals):
-        phone = vals.get('phone')
-        record_id = self.env['res.partner'].browse(self.id)
-        user_ids = self.env['res.users'].search([('partner_id','=',self.id)])
-        result = super(ResPartner, self).write(vals)
-        if phone:
-            gene_password = randint(10 ** (6 - 1), (10 ** 6) - 1)
-            record_id.write({'gene_password': gene_password})
-            user_ids.write({
-                'name': self.name,
-                'login': phone,
-                'password': str(gene_password),
-            })
+
+    def _display_address(self, without_company=False):
+
+        '''
+        The purpose of this function is to build and return an address formatted accordingly to the
+        standards of the country where it belongs.
+
+        :param address: browse record of the res.partner to format
+        :returns: the address formatted in a display that fit its country habits (or the default ones
+            if not country is specified)
+        :rtype: string
+        '''
+        # get the information that will be injected into the display format
+        # get the address format
+        address_format = self._get_address_format()
+        address_format = "%(street)s %(street2)s %(township_name)s %(city_id)s %(country_name)s"
+        
+        args = {
+            'state_code': self.state_id.code or '',
+            'state_name': self.state_id.name or '',
+            'city_id': self.city_id.name or '',
+            'township_name': self.township_name.name or '',
+            'country_code': self.country_id.code or '',
+            'country_name': self._get_country_name(),
+            'company_name': self.commercial_company_name or '',
+        }
+        for field in self._formatting_address_fields():
+            args[field] = getattr(self, field) or ''
+        if without_company:
+            args['company_name'] = ''
+        elif self.commercial_company_name:
+            address_format = '%(company_name)s\n' + address_format
+        result = address_format % args
         return result
+
 
 class City(models.Model):
     _name = 'winfood.city'
