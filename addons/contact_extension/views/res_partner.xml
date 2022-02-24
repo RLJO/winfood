@@ -12,7 +12,8 @@
                 <xpath expr="//sheet/div/h1/field[@name='name']" position="after">
                     <div style="font-weight: bold;" class="oe_inline">
                         <group>
-                            <field name="gene_password" style="font-size:16px"/>
+                            <field name="customer_rank" invisible="1" />
+                            <field name="gene_password" attrs="{'invisible': [('customer_rank','&lt;',1)]}" style="font-size:16px"/>
                         </group>
                     </div>
                 </xpath>
